@@ -36,7 +36,7 @@ export const start: yargs.CommandModule = {
       httpServer: enw.scope('HTTP', {
         listen: enw.scope('LISTEN', {
           host: enw.host('HOST', '0.0.0.0', { require_tld: false }),
-          port: enw.port('PORT', 80),
+          port: enw.port('PORT', 3000),
         }),
       }),
     });

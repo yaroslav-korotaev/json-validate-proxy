@@ -9,6 +9,6 @@ schemas:
 routes:
   - route: /test
     proxy:
-      url: http://localhost:3000
+      url: http://localhost:8080
       timeout: 1000
     schema: test
