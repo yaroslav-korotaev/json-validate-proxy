@@ -2,9 +2,11 @@
 
 import 'source-map-support/register';
 import yargs from 'yargs';
+import { globalOptions } from '../global-args';
 import { start } from '../commands/start';
 
 yargs
+  .options(globalOptions)
   .command(start)
   .demandCommand()
   .help()

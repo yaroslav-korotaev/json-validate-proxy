@@ -1,4 +1,4 @@
-import type { Log } from './log';
+import type { Log } from '../log';
 
 export interface CliContext {
   log: Log;

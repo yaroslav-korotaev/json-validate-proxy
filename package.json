@@ -16,7 +16,7 @@
     "dist"
   ],
   "bin": {
-    "json-validate-proxy": "dist/bin/cli.js"
+    "json-validate-proxy": "dist/cli/bin/json-validate-proxy.js"
   },
   "repository": "yaroslav-korotaev/json-validate-proxy",
   "scripts": {
@@ -24,16 +24,38 @@
     "watch": "tsc -w"
   },
   "dependencies": {
+    "ajv": "^6.12.2",
+    "enw": "^1.0.0",
+    "erroar": "^1.0.1",
+    "fs-extra": "^9.0.1",
+    "got": "^11.3.0",
+    "hurp": "^4.0.2",
+    "hurp-http-server": "^1.0.4",
+    "hurp-launch": "^2.0.1",
+    "hurp-types": "^1.0.3",
+    "koa": "^2.12.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compose": "^4.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^9.0.1",
+    "lodash": "^4.17.15",
     "pino": "^6.3.2",
     "pino-pretty": "^4.0.0",
     "source-map-support": "^0.5.19",
+    "yaml": "^1.10.0",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "@types/node": "^13.13.4",
+    "@types/fs-extra": "^9.0.1",
+    "@types/koa": "^2.11.3",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-mount": "^4.0.0",
+    "@types/koa-router": "^7.4.1",
+    "@types/lodash": "^4.14.155",
+    "@types/node": "^14.0.13",
     "@types/pino": "^6.3.0",
     "@types/source-map-support": "^0.5.1",
     "@types/yargs": "^15.0.5",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   }
 }

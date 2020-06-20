@@ -1,0 +1,14 @@
+schemas:
+  - $id: test
+    type: object
+    properties:
+      foo:
+        type: string
+        const: bar
+    required: ["foo"]
+routes:
+  - route: /test
+    proxy:
+      url: http://localhost:3000
+      timeout: 1000
+    schema: test
