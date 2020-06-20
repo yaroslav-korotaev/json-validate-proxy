@@ -1,0 +1,39 @@
+{
+  "name": "json-validate-proxy",
+  "version": "0.0.0",
+  "description": "JSON validate proxy",
+  "keywords": [
+    "json",
+    "schema",
+    "validate",
+    "http",
+    "proxy"
+  ],
+  "bugs": "https://github.com/yaroslav-korotaev/json-validate-proxy/issues",
+  "license": "MIT",
+  "author": "Yaroslav Korotaev <yaroslav.korotaev@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "json-validate-proxy": "dist/bin/cli.js"
+  },
+  "repository": "yaroslav-korotaev/json-validate-proxy",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "pino": "^6.3.2",
+    "pino-pretty": "^4.0.0",
+    "source-map-support": "^0.5.19",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.4",
+    "@types/pino": "^6.3.0",
+    "@types/source-map-support": "^0.5.1",
+    "@types/yargs": "^15.0.5",
+    "typescript": "^3.8.3"
+  }
+}
