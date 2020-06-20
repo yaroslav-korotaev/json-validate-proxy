@@ -1,0 +1,7 @@
+*
+!/dist
+!/node_modules
+!/CHANGELOG.md
+!/package.json
+!/package-lock.json
+!/README.md
