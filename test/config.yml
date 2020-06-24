@@ -7,8 +7,8 @@ schemas:
         const: bar
     required: ["foo"]
 routes:
-  - route: /test
+  - route: /foo
     proxy:
-      url: http://localhost:8080
+      url: http://localhost:8080/bar
       timeout: 1000
     schema: test
