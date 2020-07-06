@@ -5,6 +5,7 @@ export interface Proxy {
 
 export interface Route {
   route: string;
+  extendTypes?: string[];
   proxy: Proxy;
   schema: string;
 }

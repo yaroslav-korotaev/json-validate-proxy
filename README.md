@@ -69,7 +69,11 @@ Config file consists of schema list and routing table.
 
 JSON schema refers to a [public standard](https://json-schema.org/), validation implemented with [Ajv](https://github.com/ajv-validator/ajv). So, any valid JSON schema is supported.
 
-In a routing rule, `proxy.url` specifies exact URL where the request will be sent. Proxied request URL will not be modified in any way with original request URL parts.
+All routes are exposed at the `/proxy` prefix. So, when you specify `route: /foo`, this route will be available at `/proxy/foo` path.
+
+Request body will be parsed and JSON only if there is corresponding `Content-Type` header. Acceptable values by default is `application/json`, `application/json-patch+json`, `application/vnd.api+json`, `application/csp-report`. You can extend this set with the `extendTypes` option.
+
+The `proxy.url` specifies exact URL where the request will be sent. Proxied request URL will not be modified in any way with original request URL parts.
 
 ```yaml
 schemas: # array of JSON schema objects
@@ -81,7 +85,8 @@ schemas: # array of JSON schema objects
         const: bar
     required: ["foo"]
 routes:
-  - route: /foo # location for this rule
+  - route: /foo # location for this rule (will be at /proxy/foo)
+    extendTypes: ["*/*"] # extend the default set of JSON-related Content-Type headers
     proxy:
       url: http://localhost:8080/bar # URL where to proxy to
       timeout: 1000 # upstream timeout in ms (optional, 5000 by default)

@@ -1,4 +1,3 @@
-import stream from 'stream';
 import _ from 'lodash';
 import compose from 'koa-compose';
 import bodyParser from 'koa-bodyparser';
@@ -30,49 +29,61 @@ export function createProxy(options: CreateProxyOptions): Middleware {
   
   for (const route of config.routes) {
     const proxyTimeout = _.defaultTo(route.proxy.timeout, 5000);
+    const extendTypesJson = _.defaultTo(route.extendTypes, []);
     
-    router.post(route.route, async (ctx, next) => {
-      const valid = ajv.validate(route.schema, ctx.request.body);
-      
-      if (!valid) {
-        throw e.invalid({ what: 'request', payload: { errors: ajv.errors } });
-      }
-      
-      const filteredRequestHeaders = _.omit(ctx.request.headers, FILTER_REQUEST_HEADERS);
-      
-      try {
-        const proxyRes = await got(route.proxy.url, {
-          method: ctx.request.method as Got.Method,
-          headers: {
-            ...filteredRequestHeaders,
-            'x-forward-for': ctx.request.ip,
-          },
-          body: ctx.request.rawBody,
-          responseType: 'buffer',
-          timeout: proxyTimeout,
-          retry: 0,
-          followRedirect: false,
-          throwHttpErrors: false,
-        });
+    router.post(route.route, compose([
+      bodyParser({
+        enableTypes: ['json'],
+        jsonLimit: '10mb',
+        extendTypes: {
+          json: extendTypesJson,
+        },
+      }),
+      async (ctx, next) => {
+        const valid = ajv.validate(route.schema, ctx.request.body);
         
-        ctx.response.status = proxyRes.statusCode;
-        ctx.response.set(proxyRes.headers as { [key: string]: string });
-        ctx.response.body = proxyRes.body;
-      } catch (err) {
-        if (err instanceof Got.TimeoutError) {
-          throw e.gatewayTimeout({ err });
+        if (!valid) {
+          log.trace({
+            headers: ctx.request.headers,
+            rawBody: ctx.request.rawBody,
+            errors: ajv.errors,
+          }, 'validation error');
+          
+          throw e.invalid({ what: 'request', payload: { errors: ajv.errors } });
         }
         
-        throw e.gateway({ err });
-      }
-    });
+        const filteredRequestHeaders = _.omit(ctx.request.headers, FILTER_REQUEST_HEADERS);
+        
+        try {
+          const proxyRes = await got(route.proxy.url, {
+            method: ctx.request.method as Got.Method,
+            headers: {
+              ...filteredRequestHeaders,
+              'x-forward-for': ctx.request.ip,
+            },
+            body: ctx.request.rawBody,
+            responseType: 'buffer',
+            timeout: proxyTimeout,
+            retry: 0,
+            followRedirect: false,
+            throwHttpErrors: false,
+          });
+          
+          ctx.response.status = proxyRes.statusCode;
+          ctx.response.set(proxyRes.headers as { [key: string]: string });
+          ctx.response.body = proxyRes.body;
+        } catch (err) {
+          if (err instanceof Got.TimeoutError) {
+            throw e.gatewayTimeout({ err });
+          }
+          
+          throw e.gateway({ err });
+        }
+      },
+    ]));
   }
   
   return compose([
-    bodyParser({
-      enableTypes: ['json'],
-      jsonLimit: '10mb',
-    }),
     router.routes(),
     router.allowedMethods(),
   ]);
